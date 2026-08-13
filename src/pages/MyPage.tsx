@@ -11,7 +11,11 @@ import { getProposalStatusLabel, getProposalStatusTone } from '../lib/proposalSt
 import { supabase } from '../lib/supabase'
 import { COLORS } from '../tokens/tokens'
 import type { BadgeTone } from '../tokens/tokens'
-import type { AccountRole, Proposal } from '../types/database'
+import type { AccountRole, Proposal, ProposalStatus } from '../types/database'
+
+// 학생회로 전달되어 살아 있는 안건. SELECTED_PROPOSAL_STATUSES 와 달리
+// 'rejected' 를 포함하지 않는다 — 반려는 선정된 안건이 아니다.
+const SELECTED_MY_PAGE_STATUSES: ProposalStatus[] = ['selected', 'discussing', 'done']
 
 const ACCOUNT_ROLE_LABELS: Record<AccountRole, string> = {
   student: '학생',
@@ -133,7 +137,8 @@ export default function MyPage() {
 
   // Stats
   const totalProposals = myProposals.length
-  const selectedCount = myProposals.filter(p => p.status !== 'active' && p.status !== 'blinded').length
+  // 반려는 선정이 아니므로 제외한다.
+  const selectedCount = myProposals.filter(p => SELECTED_MY_PAGE_STATUSES.includes(p.status)).length
 
   // Change password
   const handleChangePw = async () => {
