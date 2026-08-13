@@ -378,6 +378,8 @@ export default function MyPage() {
               myProposals.map((m, i) => {
                 const [stateLabel, tone] = proposalStatus(m)
                 const isActive = m.status === 'active'
+                const isBlinded = m.status === 'blinded'
+                const isRejected = m.status === 'rejected'
                 return (
                   <div
                     key={m.id}
@@ -411,6 +413,14 @@ export default function MyPage() {
                             {m.vote_count}/30표
                           </span>
                         </div>
+                      ) : isBlinded ? (
+                        <span style={{ fontSize: 11, color: COLORS.inkMuted, fontWeight: 600 }}>
+                          운영진 검토로 비공개 처리됨 · 나에게만 보입니다
+                        </span>
+                      ) : isRejected ? (
+                        <span style={{ fontSize: 11, color: COLORS.warn, fontWeight: 600 }}>
+                          반려됨 · {m.vote_count}표
+                        </span>
                       ) : (
                         <span style={{ fontSize: 11, color: COLORS.brand, fontWeight: 600 }}>
                           ✓ 선정 · {m.vote_count}표
