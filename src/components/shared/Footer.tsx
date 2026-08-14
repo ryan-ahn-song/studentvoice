@@ -37,7 +37,7 @@ export default function Footer() {
         </div>
 
         <div className="md:ml-auto flex flex-col items-start md:items-end justify-end self-stretch text-sm flex-shrink-0 gap-0.5 whitespace-nowrap">
-          <span>site made by <a href="https://github.com/ryan-ahn-song" target="_blank" rel="noopener noreferrer" className="font-bold hover:underline" style={{ color: 'inherit' }}>Quackk08</a></span>
+          <span>site made by <a href="https://github.com/ryan-ahn-song" target="_blank" rel="noopener noreferrer" className="font-bold hover:underline" style={{ color: 'inherit' }}>Ryan Ahn Song</a></span>
           <span>© 2026 <strong className="font-bold">ACT.</strong> All rights reserved.</span>
         </div>
       </div>
