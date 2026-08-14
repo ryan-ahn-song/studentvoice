@@ -40,7 +40,7 @@ export default function FabHero() {
       </p>
 
       {/* CTA buttons */}
-      <div className="mt-9 flex flex-col sm:flex-row gap-2.5 items-stretch sm:items-center mx-auto w-full sm:w-auto max-w-sm sm:max-w-none">
+      <div className="mt-9 flex flex-col sm:flex-row gap-2.5 items-stretch sm:items-center justify-center mx-auto w-full max-w-sm sm:max-w-none">
         <button
           onClick={() => navigate('/login')}
           className="px-5.5 py-3.25 rounded-2.5 bg-ink text-white text-base sm:text-lg font-bold cursor-pointer inline-flex items-center justify-center gap-2 tracking-tight hover:opacity-90"

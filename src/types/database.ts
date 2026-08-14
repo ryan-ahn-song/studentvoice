@@ -28,6 +28,8 @@ export interface Proposal {
   body: string
   is_anonymous: boolean
   status: ProposalStatus
+  /** Absent on schemas predating the moderation columns. */
+  moderation_status?: ModerationStatus
   vote_count: number
   view_count: number
   comment_count: number

@@ -421,7 +421,12 @@ export function useMyProposals(userId: string | undefined) {
       queryProposalSource((source, columns) => supabase.from(source).select(columns).eq('author_id', userId)
         .order('created_at', { ascending: false }))
         .then(({ data }) => {
-          setData((data ?? []) as Proposal[])
+          // 'trash' is a soft delete — hide it from the author. Blinded proposals
+          // stay visible so the author can see why their post disappeared.
+          // Filtered here rather than in the query so an older schema without the
+          // column degrades to "show everything" instead of erroring.
+          const rows = ((data ?? []) as Proposal[]).filter(p => p.moderation_status !== 'trashed')
+          setData(rows)
           setLoading(false)
         })
     }
@@ -1002,12 +1007,20 @@ export async function getSavesCount(proposalId: string): Promise<number> {
 // ── Delete a proposal ────────────────────────────────────────
 export async function deleteProposal(proposalId: string) {
   if (!isUuid(proposalId)) return { error: 'Invalid request.' }
-  const { error } = await supabase
+  // proposals_delete_own requires status = 'active', so a moderated proposal
+  // matches zero rows — which PostgREST does not report as an error. Confirm a
+  // row was actually removed instead of reporting a silent no-op as success.
+  const { data, error } = await supabase
     .from('proposals')
     .delete()
     .eq('id', proposalId)
-  if (!error) announceDataChanged()
-  return { error: error?.message ?? null }
+    .select('id')
+    .maybeSingle()
+
+  if (error) return { error: error.message }
+  if (!data) return { error: '운영진이 이미 처리한 안건이거나 삭제 권한이 없습니다.' }
+  announceDataChanged()
+  return { error: null }
 }
 
 // ── Update a proposal (author only, status=active) ───────────
